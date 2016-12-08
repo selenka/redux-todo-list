@@ -1,18 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux'
+import ToDoList from './components/ToDoList'
+import todoApp from './reducers'
 
-const Test = React.createClass({
-
-    render: function () {
-
-        return (
-            <div>Launch!</div>
-        );
-    }
-});
-
+let store = createStore(todoApp);
 
 ReactDOM.render(
-    <Test />,
+    <Provider store={store}>
+        <ToDoList />
+    </Provider>,
     document.getElementById('wrapper')
 );
