@@ -23570,37 +23570,55 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var AddTodo = function AddTodo(_ref) {
-	    var dispatch = _ref.dispatch;
+	var AddTodo = _react2.default.createClass({
+	    displayName: 'AddTodo',
 
-	    var input = void 0;
+	    render: function render() {
+	        var _this = this;
 
-	    return _react2.default.createElement(
-	        'div',
-	        null,
-	        _react2.default.createElement(
-	            'form',
-	            { onSubmit: function onSubmit(e) {
-	                    e.preventDefault();
-	                    if (!input.value.trim()) {
-	                        return;
-	                    }
-	                    dispatch((0, _actions.addTodo)(input.value));
-	                    input.value = '';
-	                } },
-	            _react2.default.createElement('input', { ref: function ref(node) {
-	                    input = node;
-	                } }),
+	        var input = void 0;
+	        return _react2.default.createElement(
+	            'div',
+	            null,
 	            _react2.default.createElement(
-	                'button',
-	                { type: 'submit' },
-	                'Add Todo'
+	                'form',
+	                { onSubmit: function onSubmit(e) {
+	                        e.preventDefault();
+	                        if (!input.value.trim()) {
+	                            return;
+	                        }
+	                        _this.props.onAddTodo(input.value);
+	                        input.value = '';
+	                    } },
+	                _react2.default.createElement('input', { ref: function ref(node) {
+	                        input = node;
+	                    } }),
+	                _react2.default.createElement(
+	                    'button',
+	                    { type: 'submit' },
+	                    'Add Todo'
+	                )
 	            )
-	        )
-	    );
-	};
-	AddTodo = (0, _reactRedux.connect)()(AddTodo);
+	        );
+	    }
+	});
 
+	AddTodo = (0, _reactRedux.connect)(function (store) {
+	    // здесь тебе придет весь стор и ты возвращаешь из всего стора то, что тебе нужно в твоем компоненте. или может весь стор вернуть для начала
+	    return store;
+	}, function (dispatch) {
+	    // сюда тебе приходит ф-ция диспатч
+	    // и ты возвращаешь объект, который содержит методы-обертки для вызова диспатча
+	    // все эти методы будут переданы в props в сам компонент
+	    // для примера я тут пишу обертку для эд туду
+	    return {
+	        onAddTodo: function onAddTodo(value) {
+	            dispatch((0, _actions.addTodo)(value));
+	        }
+	    };
+	    // после этого когда ты хочешь задиспатчить событие добавления туду
+	    // ты у себя в компоненте вызываешь this.props.onAddTodo()
+	})(AddTodo);
 	exports.default = AddTodo;
 
 /***/ },
