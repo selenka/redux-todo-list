@@ -26,7 +26,7 @@ let AddTodo = React.createClass ({
         )
 
     }
-})
+});
 
 AddTodo = connect(
     function(store) {

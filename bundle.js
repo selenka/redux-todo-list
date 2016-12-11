@@ -23313,6 +23313,11 @@
 	            return state.map(function (t) {
 	                return todo(t, action);
 	            });
+
+	        case 'DELETE_TODO':
+	            return state.filter(function (todo) {
+	                return todo.id != action.id;
+	            });
 	        default:
 	            return state;
 	    }
@@ -23501,6 +23506,13 @@
 	    };
 	};
 
+	var deleteTodo = exports.deleteTodo = function deleteTodo(id) {
+	    return {
+	        type: 'DELETE_TODO',
+	        id: id
+	    };
+	};
+
 /***/ },
 /* 216 */
 /***/ function(module, exports, __webpack_require__) {
@@ -23666,6 +23678,9 @@
 	    return {
 	        onTodoClick: function onTodoClick(id) {
 	            dispatch((0, _actions.toggleTodo)(id));
+	        },
+	        onDeleteClick: function onDeleteClick(id) {
+	            dispatch((0, _actions.deleteTodo)(id));
 	        }
 	    };
 	};
@@ -23698,7 +23713,8 @@
 
 	var TodoList = function TodoList(_ref) {
 	    var todos = _ref.todos,
-	        onTodoClick = _ref.onTodoClick;
+	        onTodoClick = _ref.onTodoClick,
+	        _onDeleteClick = _ref.onDeleteClick;
 	    return _react2.default.createElement(
 	        'ul',
 	        null,
@@ -23708,6 +23724,9 @@
 	            }, todo, {
 	                onClick: function onClick() {
 	                    return onTodoClick(todo.id);
+	                },
+	                onDeleteClick: function onDeleteClick() {
+	                    return _onDeleteClick(todo.id);
 	                }
 	            }));
 	        })
@@ -23719,8 +23738,7 @@
 	        id: _react.PropTypes.number.isRequired,
 	        completed: _react.PropTypes.bool.isRequired,
 	        text: _react.PropTypes.string.isRequired
-	    }).isRequired).isRequired,
-	    onTodoClick: _react.PropTypes.func.isRequired
+	    }).isRequired).isRequired
 	};
 
 	exports.default = TodoList;
@@ -23743,17 +23761,26 @@
 
 	var Todo = function Todo(_ref) {
 	    var onClick = _ref.onClick,
+	        onDeleteClick = _ref.onDeleteClick,
 	        completed = _ref.completed,
 	        text = _ref.text;
 	    return _react2.default.createElement(
 	        'li',
-	        {
-	            onClick: onClick,
-	            style: {
-	                textDecoration: completed ? 'line-through' : 'none'
-	            }
-	        },
-	        text
+	        null,
+	        _react2.default.createElement(
+	            'span',
+	            { onClick: onClick,
+	                style: {
+	                    textDecoration: completed ? 'line-through' : 'none'
+	                }
+	            },
+	            text
+	        ),
+	        _react2.default.createElement(
+	            'button',
+	            { type: 'button', onClick: onDeleteClick },
+	            'Delete'
+	        )
 	    );
 	};
 
