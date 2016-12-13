@@ -3,21 +3,14 @@ import { connect } from 'react-redux'
 import { attachList, changeList} from '../actions'
 
 
-let ListSelector = ({onAttachListClick, onChangeListType, onBlurListType, list_types, attached, selected}) => (
+let ListSelector = ({id, onChangeListType, onBlurListType, list_types, attached, selected}) => (
     <div style={{display: 'inline-block'}}>
-        <button type="button"
-                className="attach"
-                onClick={onAttachListClick}
-                style={{
-                    display: attached ? 'none' : 'inline-block'
-                }}
-        >Attach</button>
-        <select value={selected || 'none'}
+        <select name={id} value={selected || 'none'}
                 style={{
                     display: attached ? 'inline-block' : 'none'
                 }}
                 onChange={onChangeListType}
-                onBlur={onBlurListType}
+                onBlur={() => onBlurListType({id})}
         >
             <option key="none" value="none">None</option>
             {list_types.map(list_type =>
@@ -33,14 +26,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onAttachListClick: (id) => {
-            dispatch(attachList(id));
-        },
         onChangeListType: (event) => {
-            dispatch(changeList(event.target.value));
+            dispatch(changeList(event.target.value, +event.target.name));
         },
-        onBlurListType: (id) => {
-            dispatch(attachList(id));
+        onBlurListType: (value) => {
+            dispatch(attachList(value.id));
         }
     }
 };

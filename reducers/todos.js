@@ -18,11 +18,18 @@ const todo = (state = {}, action) => {
             });
 
         case 'ATTACH_LIST':
+            if (state.id !== action.id) {
+                return state
+            }
+
             return Object.assign({}, state, {
                 attached: !state.attached
             });
 
         case 'CHANGE_LIST':
+            if (state.id !== action.id) {
+                return state
+            }
             return Object.assign({}, state, {
                 list_type: action.text
             });
@@ -46,8 +53,6 @@ const todos = (state = [], action) => {
         case 'DELETE_TODO':
             return state.filter((todo) => {
                 return todo.id != action.id;
-
-
             });
 
         case 'ATTACH_LIST':

@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-//import { toggleTodo, deleteTodo } from '../actions'
+import { toggleTodo, deleteTodo } from '../actions'
 import ListOfTypesCmp from '../components/ListOfTypesCmp'
 
 
@@ -17,6 +17,7 @@ const mapDispatchToProps = (dispatch) => {
         onDeleteClick: (id) => {
             dispatch(deleteTodo(id));
         }
+
     }
 };
 

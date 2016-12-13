@@ -31,6 +31,7 @@ export const toggleTodo = (id) => {
 };
 
 export const deleteTodo = (id) => {
+    console.log(id);
     return {
         type: 'DELETE_TODO',
         id
@@ -44,9 +45,10 @@ export const attachList = (id) => {
     }
 };
 
-export const changeList = (text) => {
+export const changeList = (text, id) => {
     return {
         type: 'CHANGE_LIST',
-        text
+        text,
+        id
     }
 };

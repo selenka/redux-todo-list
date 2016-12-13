@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import Todo from './Todo'
 
-const TodoList = ({ todos, onTodoClick, onDeleteClick }) => (
+const TodoList = ({ todos, onTodoClick, onDeleteClick, onAttachClick}) => (
     <ul>
         {todos.map(todo =>
             <Todo
@@ -9,6 +9,7 @@ const TodoList = ({ todos, onTodoClick, onDeleteClick }) => (
                 {...todo}
                 onClick={() => onTodoClick(todo.id)}
                 onDeleteClick={() => onDeleteClick(todo.id)}
+                onAttachClick={() => onAttachClick(todo.id)}
             />
         )}
     </ul>

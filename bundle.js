@@ -23305,11 +23305,18 @@
 	            });
 
 	        case 'ATTACH_LIST':
+	            if (state.id !== action.id) {
+	                return state;
+	            }
+
 	            return Object.assign({}, state, {
 	                attached: !state.attached
 	            });
 
 	        case 'CHANGE_LIST':
+	            if (state.id !== action.id) {
+	                return state;
+	            }
 	            return Object.assign({}, state, {
 	                list_type: action.text
 	            });
@@ -23553,6 +23560,7 @@
 	};
 
 	var deleteTodo = exports.deleteTodo = function deleteTodo(id) {
+	    console.log(id);
 	    return {
 	        type: 'DELETE_TODO',
 	        id: id
@@ -23566,10 +23574,11 @@
 	    };
 	};
 
-	var changeList = exports.changeList = function changeList(text) {
+	var changeList = exports.changeList = function changeList(text, id) {
 	    return {
 	        type: 'CHANGE_LIST',
-	        text: text
+	        text: text,
+	        id: id
 	    };
 	};
 
@@ -23741,6 +23750,9 @@
 	        },
 	        onDeleteClick: function onDeleteClick(id) {
 	            dispatch((0, _actions.deleteTodo)(id));
+	        },
+	        onAttachClick: function onAttachClick(id) {
+	            dispatch((0, _actions.attachList)(id));
 	        }
 	    };
 	};
@@ -23774,7 +23786,8 @@
 	var TodoList = function TodoList(_ref) {
 	    var todos = _ref.todos,
 	        onTodoClick = _ref.onTodoClick,
-	        _onDeleteClick = _ref.onDeleteClick;
+	        _onDeleteClick = _ref.onDeleteClick,
+	        _onAttachClick = _ref.onAttachClick;
 	    return _react2.default.createElement(
 	        'ul',
 	        null,
@@ -23787,6 +23800,9 @@
 	                },
 	                onDeleteClick: function onDeleteClick() {
 	                    return _onDeleteClick(todo.id);
+	                },
+	                onAttachClick: function onAttachClick() {
+	                    return _onAttachClick(todo.id);
 	                }
 	            }));
 	        })
@@ -23826,8 +23842,10 @@
 	var Todo = function Todo(_ref) {
 	    var onClick = _ref.onClick,
 	        onDeleteClick = _ref.onDeleteClick,
+	        onAttachClick = _ref.onAttachClick,
 	        completed = _ref.completed,
 	        text = _ref.text,
+	        id = _ref.id,
 	        attached = _ref.attached,
 	        list_type = _ref.list_type;
 	    return _react2.default.createElement(
@@ -23852,7 +23870,18 @@
 	            { type: 'button', className: 'delete', onClick: onDeleteClick },
 	            'Delete'
 	        ),
-	        _react2.default.createElement(_ListSelector2.default, { attached: attached, selected: list_type })
+	        _react2.default.createElement(
+	            'button',
+	            { type: 'button',
+	                className: 'attach',
+	                onClick: onAttachClick,
+	                style: {
+	                    display: attached ? 'none' : 'inline-block'
+	                }
+	            },
+	            'Attach'
+	        ),
+	        _react2.default.createElement(_ListSelector2.default, { id: id, attached: attached, selected: list_type })
 	    );
 	};
 
@@ -23940,6 +23969,8 @@
 
 	var _reactRedux = __webpack_require__(179);
 
+	var _actions = __webpack_require__(215);
+
 	var _ListOfTypesCmp = __webpack_require__(223);
 
 	var _ListOfTypesCmp2 = _interopRequireDefault(_ListOfTypesCmp);
@@ -23951,17 +23982,16 @@
 	        list_types: state.list_types
 	    };
 	};
-	//import { toggleTodo, deleteTodo } from '../actions'
-
 
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	    return {
 	        onTodoClick: function onTodoClick(id) {
-	            dispatch(toggleTodo(id));
+	            dispatch((0, _actions.toggleTodo)(id));
 	        },
 	        onDeleteClick: function onDeleteClick(id) {
-	            dispatch(deleteTodo(id));
+	            dispatch((0, _actions.deleteTodo)(id));
 	        }
+
 	    };
 	};
 
@@ -24049,7 +24079,7 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var ListSelector = function ListSelector(_ref) {
-	    var onAttachListClick = _ref.onAttachListClick,
+	    var id = _ref.id,
 	        onChangeListType = _ref.onChangeListType,
 	        onBlurListType = _ref.onBlurListType,
 	        list_types = _ref.list_types,
@@ -24059,24 +24089,15 @@
 	        'div',
 	        { style: { display: 'inline-block' } },
 	        _react2.default.createElement(
-	            'button',
-	            { type: 'button',
-	                className: 'attach',
-	                onClick: onAttachListClick,
-	                style: {
-	                    display: attached ? 'none' : 'inline-block'
-	                }
-	            },
-	            'Attach'
-	        ),
-	        _react2.default.createElement(
 	            'select',
-	            { value: selected || 'none',
+	            { name: id, value: selected || 'none',
 	                style: {
 	                    display: attached ? 'inline-block' : 'none'
 	                },
 	                onChange: onChangeListType,
-	                onBlur: onBlurListType
+	                onBlur: function onBlur() {
+	                    return onBlurListType({ id: id });
+	                }
 	            },
 	            _react2.default.createElement(
 	                'option',
@@ -24100,14 +24121,11 @@
 
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	    return {
-	        onAttachListClick: function onAttachListClick(id) {
-	            dispatch((0, _actions.attachList)(id));
-	        },
 	        onChangeListType: function onChangeListType(event) {
-	            dispatch((0, _actions.changeList)(event.target.value));
+	            dispatch((0, _actions.changeList)(event.target.value, +event.target.name));
 	        },
-	        onBlurListType: function onBlurListType(id) {
-	            dispatch((0, _actions.attachList)(id));
+	        onBlurListType: function onBlurListType(value) {
+	            dispatch((0, _actions.attachList)(value.id));
 	        }
 	    };
 	};
