@@ -1,0 +1,44 @@
+* {
+    font-family: 'Raleway'
+}
+input {
+    padding: 5px;
+    margin: 5px;
+}
+button {
+    padding: 5px;
+    background: lightskyblue;
+    color: white;
+    outline: none;
+    border: none;
+    font-size: 12px;
+    text-transform: uppercase;
+    margin: 0 5px;
+}
+button.attach {
+    background: cadetblue;
+}
+button.delete {
+    background: coral;
+}
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+ul li {
+    padding: 5px;
+    border-bottom: 1px solid #d0caca;
+    background: #f3f3f3;
+}
+ul li:last-child {
+    border-bottom: none;
+}
+#wrapper {
+    max-width: 500px;
+}
+.selected-list {
+    background: gainsboro;
+    font-size: 12px;
+    margin: 5px;
+    border-radius: 4px;
+}

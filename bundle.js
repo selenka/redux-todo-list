@@ -23416,9 +23416,9 @@
 	        'div',
 	        null,
 	        _react2.default.createElement(_AddTodo2.default, null),
-	        _react2.default.createElement(_AddListType2.default, null),
 	        _react2.default.createElement(_VisibleTodoList2.default, null),
 	        _react2.default.createElement(_Footer2.default, null),
+	        _react2.default.createElement(_AddListType2.default, null),
 	        _react2.default.createElement(_ListOfTypes2.default, null)
 	    );
 	};
@@ -23843,8 +23843,13 @@
 	            text
 	        ),
 	        _react2.default.createElement(
+	            'span',
+	            { className: 'selected-list' },
+	            list_type == 'none' ? '' : list_type
+	        ),
+	        _react2.default.createElement(
 	            'button',
-	            { type: 'button', onClick: onDeleteClick },
+	            { type: 'button', className: 'delete', onClick: onDeleteClick },
 	            'Delete'
 	        ),
 	        _react2.default.createElement(_ListSelector2.default, { attached: attached, selected: list_type })
@@ -24056,17 +24061,13 @@
 	        _react2.default.createElement(
 	            'button',
 	            { type: 'button',
+	                className: 'attach',
 	                onClick: onAttachListClick,
 	                style: {
 	                    display: attached ? 'none' : 'inline-block'
 	                }
 	            },
 	            'Attach'
-	        ),
-	        _react2.default.createElement(
-	            'span',
-	            null,
-	            selected == 'none' ? '' : selected
 	        ),
 	        _react2.default.createElement(
 	            'select',

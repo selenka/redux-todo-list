@@ -10,7 +10,8 @@ const Todo = ({ onClick, onDeleteClick, completed, text , attached, list_type}) 
         >
             {text}
         </span>
-        <button type="button" onClick={onDeleteClick}>Delete</button>
+        <span className="selected-list">{list_type == 'none' ? '' : list_type}</span>
+        <button type="button" className="delete" onClick={onDeleteClick}>Delete</button>
         <ListSelector attached={attached} selected={list_type}/>
     </li>
 );

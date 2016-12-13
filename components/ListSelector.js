@@ -6,12 +6,12 @@ import { attachList, changeList} from '../actions'
 let ListSelector = ({onAttachListClick, onChangeListType, onBlurListType, list_types, attached, selected}) => (
     <div style={{display: 'inline-block'}}>
         <button type="button"
+                className="attach"
                 onClick={onAttachListClick}
                 style={{
                     display: attached ? 'none' : 'inline-block'
                 }}
         >Attach</button>
-        <span>{selected == 'none' ? '' : selected}</span>
         <select value={selected || 'none'}
                 style={{
                     display: attached ? 'inline-block' : 'none'

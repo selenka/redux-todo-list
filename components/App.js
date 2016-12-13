@@ -8,9 +8,9 @@ import ListOfTypes from '../containers/ListOfTypes'
 const App = () => (
     <div>
         <AddTodo />
-        <AddListType />
         <VisibleTodoList />
         <Footer />
+        <AddListType />
         <ListOfTypes />
     </div>
 )
