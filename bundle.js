@@ -23291,7 +23291,9 @@
 	            return {
 	                id: action.id,
 	                text: action.text,
-	                completed: false
+	                completed: false,
+	                attached: false,
+	                list_type: 'none'
 	            };
 	        case 'TOGGLE_TODO':
 	            if (state.id !== action.id) {
@@ -23302,6 +23304,15 @@
 	                completed: !state.completed
 	            });
 
+	        case 'ATTACH_LIST':
+	            return Object.assign({}, state, {
+	                attached: !state.attached
+	            });
+
+	        case 'CHANGE_LIST':
+	            return Object.assign({}, state, {
+	                list_type: action.text
+	            });
 	        default:
 	            return state;
 	    }
@@ -23323,6 +23334,17 @@
 	            return state.filter(function (todo) {
 	                return todo.id != action.id;
 	            });
+
+	        case 'ATTACH_LIST':
+	            return state.map(function (t) {
+	                return todo(t, action);
+	            });
+
+	        case 'CHANGE_LIST':
+	            return state.map(function (t) {
+	                return todo(t, action);
+	            });
+
 	        default:
 	            return state;
 	    }
@@ -23534,6 +23556,20 @@
 	    return {
 	        type: 'DELETE_TODO',
 	        id: id
+	    };
+	};
+
+	var attachList = exports.attachList = function attachList(id) {
+	    return {
+	        type: 'ATTACH_LIST',
+	        id: id
+	    };
+	};
+
+	var changeList = exports.changeList = function changeList(text) {
+	    return {
+	        type: 'CHANGE_LIST',
+	        text: text
 	    };
 	};
 
@@ -23781,13 +23817,19 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _ListSelector = __webpack_require__(225);
+
+	var _ListSelector2 = _interopRequireDefault(_ListSelector);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var Todo = function Todo(_ref) {
 	    var onClick = _ref.onClick,
 	        onDeleteClick = _ref.onDeleteClick,
 	        completed = _ref.completed,
-	        text = _ref.text;
+	        text = _ref.text,
+	        attached = _ref.attached,
+	        list_type = _ref.list_type;
 	    return _react2.default.createElement(
 	        'li',
 	        null,
@@ -23804,7 +23846,8 @@
 	            'button',
 	            { type: 'button', onClick: onDeleteClick },
 	            'Delete'
-	        )
+	        ),
+	        _react2.default.createElement(_ListSelector2.default, { attached: attached, selected: list_type })
 	    );
 	};
 
@@ -23979,6 +24022,98 @@
 	};
 
 	exports.default = list_types;
+
+/***/ },
+/* 225 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(179);
+
+	var _actions = __webpack_require__(215);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var ListSelector = function ListSelector(_ref) {
+	    var onAttachListClick = _ref.onAttachListClick,
+	        onChangeListType = _ref.onChangeListType,
+	        onBlurListType = _ref.onBlurListType,
+	        list_types = _ref.list_types,
+	        attached = _ref.attached,
+	        selected = _ref.selected;
+	    return _react2.default.createElement(
+	        'div',
+	        { style: { display: 'inline-block' } },
+	        _react2.default.createElement(
+	            'button',
+	            { type: 'button',
+	                onClick: onAttachListClick,
+	                style: {
+	                    display: attached ? 'none' : 'inline-block'
+	                }
+	            },
+	            'Attach'
+	        ),
+	        _react2.default.createElement(
+	            'span',
+	            null,
+	            selected == 'none' ? '' : selected
+	        ),
+	        _react2.default.createElement(
+	            'select',
+	            { value: selected || 'none',
+	                style: {
+	                    display: attached ? 'inline-block' : 'none'
+	                },
+	                onChange: onChangeListType,
+	                onBlur: onBlurListType
+	            },
+	            _react2.default.createElement(
+	                'option',
+	                { key: 'none', value: 'none' },
+	                'None'
+	            ),
+	            list_types.map(function (list_type) {
+	                return _react2.default.createElement(
+	                    'option',
+	                    { key: list_type.id, value: list_type.text },
+	                    list_type.text
+	                );
+	            })
+	        )
+	    );
+	};
+
+	var mapStateToProps = function mapStateToProps(state) {
+	    return state;
+	};
+
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	    return {
+	        onAttachListClick: function onAttachListClick(id) {
+	            dispatch((0, _actions.attachList)(id));
+	        },
+	        onChangeListType: function onChangeListType(event) {
+	            dispatch((0, _actions.changeList)(event.target.value));
+	        },
+	        onBlurListType: function onBlurListType(id) {
+	            dispatch((0, _actions.attachList)(id));
+	        }
+	    };
+	};
+
+	ListSelector = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(ListSelector);
+
+	exports.default = ListSelector;
 
 /***/ }
 /******/ ]);

@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react'
+import ListSelector from './ListSelector'
 
-const Todo = ({ onClick, onDeleteClick, completed, text }) => (
+const Todo = ({ onClick, onDeleteClick, completed, text , attached, list_type}) => (
     <li>
         <span onClick={onClick}
             style={{
@@ -10,6 +11,7 @@ const Todo = ({ onClick, onDeleteClick, completed, text }) => (
             {text}
         </span>
         <button type="button" onClick={onDeleteClick}>Delete</button>
+        <ListSelector attached={attached} selected={list_type}/>
     </li>
 );
 

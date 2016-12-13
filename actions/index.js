@@ -36,3 +36,17 @@ export const deleteTodo = (id) => {
         id
     }
 };
+
+export const attachList = (id) => {
+    return {
+        type: 'ATTACH_LIST',
+        id
+    }
+};
+
+export const changeList = (text) => {
+    return {
+        type: 'CHANGE_LIST',
+        text
+    }
+};

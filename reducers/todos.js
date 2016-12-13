@@ -4,7 +4,9 @@ const todo = (state = {}, action) => {
             return {
                 id: action.id,
                 text: action.text,
-                completed: false
+                completed: false,
+                attached: false,
+                list_type: 'none'
             };
         case 'TOGGLE_TODO':
             if (state.id !== action.id) {
@@ -15,6 +17,15 @@ const todo = (state = {}, action) => {
                 completed: !state.completed
             });
 
+        case 'ATTACH_LIST':
+            return Object.assign({}, state, {
+                attached: !state.attached
+            });
+
+        case 'CHANGE_LIST':
+            return Object.assign({}, state, {
+                list_type: action.text
+            });
         default:
             return state
     }
@@ -38,6 +49,17 @@ const todos = (state = [], action) => {
 
 
             });
+
+        case 'ATTACH_LIST':
+            return state.map(t =>
+                todo(t, action)
+            );
+
+        case 'CHANGE_LIST':
+            return state.map(t =>
+                todo(t, action)
+            );
+
         default:
             return state
     }
