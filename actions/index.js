@@ -1,8 +1,17 @@
 let nextTodoId = 0;
+let nextListTypeId = 0;
 export const addTodo = (text) => {
     return {
         type: 'ADD_TODO',
         id: nextTodoId++,
+        text
+    }
+};
+
+export const addListType= (text) => {
+    return {
+        type: 'ADD_LIST_TYPE',
+        id: 'list' + nextListTypeId++,
         text
     }
 };

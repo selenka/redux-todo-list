@@ -23252,6 +23252,10 @@
 
 	var _todos2 = _interopRequireDefault(_todos);
 
+	var _list_types = __webpack_require__(224);
+
+	var _list_types2 = _interopRequireDefault(_list_types);
+
 	var _visibilityFilter = __webpack_require__(211);
 
 	var _visibilityFilter2 = _interopRequireDefault(_visibilityFilter);
@@ -23260,6 +23264,7 @@
 
 	var todoApp = (0, _redux.combineReducers)({
 	    todos: _todos2.default,
+	    list_types: _list_types2.default,
 	    visibilityFilter: _visibilityFilter2.default
 	});
 
@@ -23370,9 +23375,17 @@
 
 	var _AddTodo2 = _interopRequireDefault(_AddTodo);
 
+	var _AddListType = __webpack_require__(221);
+
+	var _AddListType2 = _interopRequireDefault(_AddListType);
+
 	var _VisibleTodoList = __webpack_require__(218);
 
 	var _VisibleTodoList2 = _interopRequireDefault(_VisibleTodoList);
+
+	var _ListOfTypes = __webpack_require__(222);
+
+	var _ListOfTypes2 = _interopRequireDefault(_ListOfTypes);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -23381,8 +23394,10 @@
 	        'div',
 	        null,
 	        _react2.default.createElement(_AddTodo2.default, null),
+	        _react2.default.createElement(_AddListType2.default, null),
 	        _react2.default.createElement(_VisibleTodoList2.default, null),
-	        _react2.default.createElement(_Footer2.default, null)
+	        _react2.default.createElement(_Footer2.default, null),
+	        _react2.default.createElement(_ListOfTypes2.default, null)
 	    );
 	};
 
@@ -23484,10 +23499,19 @@
 	    value: true
 	});
 	var nextTodoId = 0;
+	var nextListTypeId = 0;
 	var addTodo = exports.addTodo = function addTodo(text) {
 	    return {
 	        type: 'ADD_TODO',
 	        id: nextTodoId++,
+	        text: text
+	    };
+	};
+
+	var addListType = exports.addListType = function addListType(text) {
+	    return {
+	        type: 'ADD_LIST_TYPE',
+	        id: 'list' + nextListTypeId++,
 	        text: text
 	    };
 	};
@@ -23791,6 +23815,170 @@
 	};
 
 	exports.default = Todo;
+
+/***/ },
+/* 221 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(179);
+
+	var _actions = __webpack_require__(215);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var AddListType = _react2.default.createClass({
+	    displayName: 'AddListType',
+
+	    render: function render() {
+	        var _this = this;
+
+	        var input = void 0;
+	        return _react2.default.createElement(
+	            'div',
+	            null,
+	            _react2.default.createElement(
+	                'form',
+	                { onSubmit: function onSubmit(e) {
+	                        e.preventDefault();
+	                        if (!input.value.trim()) {
+	                            return;
+	                        }
+	                        _this.props.onAddListType(input.value);
+	                        input.value = '';
+	                    } },
+	                _react2.default.createElement('input', { ref: function ref(node) {
+	                        input = node;
+	                    } }),
+	                _react2.default.createElement(
+	                    'button',
+	                    { type: 'submit' },
+	                    'Add List type'
+	                )
+	            )
+	        );
+	    }
+	});
+
+	AddListType = (0, _reactRedux.connect)(function (store) {
+	    return store;
+	}, function (dispatch) {
+	    return {
+	        onAddListType: function onAddListType(value) {
+	            dispatch((0, _actions.addListType)(value));
+	        }
+	    };
+	})(AddListType);
+	exports.default = AddListType;
+
+/***/ },
+/* 222 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _reactRedux = __webpack_require__(179);
+
+	var _ListOfTypesCmp = __webpack_require__(223);
+
+	var _ListOfTypesCmp2 = _interopRequireDefault(_ListOfTypesCmp);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var mapStateToProps = function mapStateToProps(state) {
+	    return {
+	        list_types: state.list_types
+	    };
+	};
+	//import { toggleTodo, deleteTodo } from '../actions'
+
+
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	    return {
+	        onTodoClick: function onTodoClick(id) {
+	            dispatch(toggleTodo(id));
+	        },
+	        onDeleteClick: function onDeleteClick(id) {
+	            dispatch(deleteTodo(id));
+	        }
+	    };
+	};
+
+	var ListOfTypes = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_ListOfTypesCmp2.default);
+
+	exports.default = ListOfTypes;
+
+/***/ },
+/* 223 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var ListOfTypesCmp = function ListOfTypesCmp(_ref) {
+	    var list_types = _ref.list_types;
+	    return _react2.default.createElement(
+	        'ul',
+	        null,
+	        list_types.map(function (list_type) {
+	            return _react2.default.createElement(
+	                'li',
+	                { key: list_type.id },
+	                list_type.text
+	            );
+	        })
+	    );
+	};
+
+	exports.default = ListOfTypesCmp;
+
+/***/ },
+/* 224 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+	var list_types = function list_types() {
+	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+	    var action = arguments[1];
+
+	    switch (action.type) {
+	        case 'ADD_LIST_TYPE':
+	            return [].concat(_toConsumableArray(state), [action]);
+	        default:
+	            return state;
+	    }
+	};
+
+	exports.default = list_types;
 
 /***/ }
 /******/ ]);
